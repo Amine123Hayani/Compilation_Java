@@ -1,0 +1,126 @@
+package com.esisa.compiler.parser;
+
+
+/*
+ * Grammaire
+ * 
+ * A	-> W | D
+ * W	-> while ( C ) L
+ * L	-> { I } | ;
+ * I	-> A I | eps
+ * C	-> E
+ * E	-> N OpRel N EP
+ * EP	-> OpLog E | eps
+ * N	-> id | nb
+ * D	-> do { I } while { C };
+ * 
+ * VT	-> { oprel, oplog, {, }, ;, (, ), id, nb, do, while }
+ */
+public class WhileParser extends Parser {
+
+	public WhileParser() {
+		getScanner().addReservedWordList("Boucle", "do", "while");
+	}
+
+	//A	-> W | D
+	public boolean axiom() {
+		if (W()) {
+			return true;
+		}
+		if (D()) {
+			return true;
+		}
+		return false;
+	}
+
+	//W	-> while ( C ) L
+	private boolean W() {
+		if (next("while")) {
+			if (next("(")) {
+				if (C()) {
+					if (next(")")) {
+						return L();
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	
+	//L	-> { I } | ;
+	private boolean L() {
+		if (next("{")) {
+			if (I()) {
+				return next("}");
+			}
+		}
+		return next(";");
+	}
+
+	//I	-> A I | eps
+	private boolean I() {
+		if (A()) {
+			return I();
+		}
+		return true;
+	}
+
+	//C	-> E
+	private boolean C() {
+		return E();
+	}
+
+	
+	//E	-> N OpRel N EP
+	private boolean E() {
+		if (N()) {
+			if (next("Opérateur Logique")) {
+				if (N()) {
+					return EP();
+				}
+			}
+		}
+		return false;
+	}
+	
+	//EP	-> OpLog E | eps
+	private boolean EP() {
+		if (next ("Opérateur Logique")) {
+			return E();
+		}
+		return true;
+	}
+
+	
+	//N	-> id | nb
+	private boolean N() {
+		if (next("Number")) return true;
+		if (next("Identificateur")) return true;
+		return false;
+	}
+
+	
+	//D	-> do { I } while { C };
+	private boolean D() {
+		if (next("do")) {
+			if (next("{")) {
+				if (I()) {
+					if (next("}")) {
+						if (next("while")) {
+							if (next("{")) {
+								if (C()) {
+									if (next("}")) {
+										return next(";");
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+}

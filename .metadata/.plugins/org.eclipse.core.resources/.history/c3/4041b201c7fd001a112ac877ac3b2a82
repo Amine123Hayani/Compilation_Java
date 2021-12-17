@@ -1,0 +1,9 @@
+package com.esisa.compiler.parser;
+
+public class ForParser {
+
+	public ForParser() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

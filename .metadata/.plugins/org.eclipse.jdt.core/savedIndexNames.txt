@@ -1,0 +1,1 @@
+INDEX VERSION 1.131+D:\ESISA\L3\Compilation\WorkSpace\.metadata\.plugins\org.eclipse.jdt.core

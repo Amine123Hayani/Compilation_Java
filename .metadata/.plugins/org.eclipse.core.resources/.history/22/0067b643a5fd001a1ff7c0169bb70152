@@ -1,0 +1,36 @@
+package com.esisa.compiler.parser;
+
+
+/*
+ * Grammaire
+ * 
+ * A	-> W | D
+ * W	-> while ( C ) L
+ * L	-> { I } | ;
+ * I	-> A I | eps
+ * C	-> E
+ * E	-> N OpRel N EP | N OpRel N
+ * EP	-> OpLog E | OpLog E EP
+ * N	-> id | nb
+ * D	-> do { I } while { C };
+ * 
+ * VT	-> { oprel, oplog, {, }, ;, (, ), id, nb, do, while }
+ */
+public class WhileParser extends Parser {
+
+	public WhileParser() {
+		getScanner().addReservedWordList("Boucle", "do", "while");
+	}
+
+	@Override
+	public boolean axiom() {
+		if (W()) {
+			return true;
+		}
+		if (D()) {
+			return true;
+		}
+		return false;
+	}
+
+}

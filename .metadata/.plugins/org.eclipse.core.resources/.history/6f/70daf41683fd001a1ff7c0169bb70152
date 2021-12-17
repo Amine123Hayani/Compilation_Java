@@ -1,0 +1,85 @@
+package com.esisa.compiler.parser;
+
+/*
+ * Q1 : Grammaire
+ * A 	->	if ( C ) Inst Else
+ * C	->	Op oprel Op
+ * Op	-> 	id | nb
+ * Inst ->	{ L } | I | ;
+ * L	-> 	I L | eps
+ * I	->	id = E ;
+ * Else	-> else Inst | eps
+ * E	-> 	T E'
+ * E'	->	+ T E' | - T E' | eps
+ * T	-> 	F T'
+ * T'	-> 	* F T' | / F T' | eps
+ * F	->	id | nb | ( E )
+ * 
+ * VT = { if, else, oprel, {, }, ;, =, opar, (, ), id, nb }
+ */
+
+/*
+ * Q2 : le Parser
+ */
+public class IFParser extends Parser {
+
+	public IFParser() {
+		getScanner().addReservedWordList("choice", "if", "else");
+	}
+
+	// A 	->	if ( C ) Inst Else
+	public boolean axiom() {
+		if (next("if")) {
+			if (next("(")) {
+				if (C()) {
+					if (next(")")) {
+						if (Inst()) {
+							return Else();
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	// C	->	Op oprel Op
+	private boolean C() {
+		if (Op()) {
+			if (next("Opérateur Relationnel")) {
+				return Op();
+			}
+		}
+		return false;
+	}
+	
+	//Inst ->	{ L } | I | ;
+	private boolean Inst() {
+		if(next("{")) {
+			if (L()) {
+				if (next("}")) {
+					
+				}
+			}
+		}
+		return true;
+	}
+	
+	// L	-> 	I L | eps
+	private boolean L() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean Else() {
+		return false;
+	}
+	
+	// Op	-> 	id | nb
+	private boolean Op() {
+		if (next("id")) return true;
+		if (next("number")) return true;
+		return false;
+	}
+
+}

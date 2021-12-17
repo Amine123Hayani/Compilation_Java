@@ -1,0 +1,128 @@
+package com.esisa.compiler.parser;
+
+/*
+ * Q1 Grammaire
+ * 
+ * A	-> for ( B ) C
+ * B	-> I O R
+ * I	-> id = N; | ;
+ * O	-> id oprel N; | ;
+ * R	-> X | Y | eps
+ * X	-> id + +
+ * Y	-> id - -
+ * N	-> id | nb
+ * C	-> { L } | ;
+ * L	-> A L | eps
+ */
+public class FORParser extends Parser {
+
+	public FORParser() {
+		getScanner().addReservedWordList("for");
+	}
+
+	//A	-> for ( B ) C
+	public boolean axiom() {
+		if (next("for")) {
+			if (next("(")) {
+				if (B()) {
+					if (next(")")) {
+						return C();
+					}					
+				}
+			}
+		}
+		return false;
+	}
+	
+	//B	-> I O R
+	private boolean B() {
+		if (I()) {
+			if (O()) {
+				return R();
+			}
+		}
+		return true;
+	}
+	
+	//R	-> X | Y | eps
+	private boolean R() {
+		if (X()) {
+			return true;
+		}
+		if (Y()) {
+			return true;
+		}
+		return true;
+	}
+	
+	
+	//Y	-> id - -
+	private boolean Y() {
+		if (next("Identificateur")) {
+			if (next("-")) {
+				return next("-");
+			}
+		}
+		return false;
+	}
+
+	//X	-> id++
+	private boolean X() {
+		if (next("Identificateur")) {
+			if (next("+")) {
+				return next("+");
+			}
+		}
+		return false;
+	}
+
+	//O	-> id oprel N; | ;
+	private boolean O() {
+		if (next("Identificateur")) {
+			if (next("Opérateur Relationnel")) {
+				if (N()) {
+					return next(";");
+				}
+			}
+		}
+		return next(";");
+	}
+
+	//I	-> id = N; | ;
+	private boolean I() {
+		if (next("Identificateur")) {
+			if (next("=")) {
+				if (N()) {
+					return next(";");
+				}
+			}
+		}
+		return next(";");
+	}
+
+	//N	-> id | nb
+	private boolean N() {
+		if (next("Identificateur")) {
+			return true;
+		}
+		return next("Number");
+	}
+
+	//C	-> { L } | ;
+	private boolean C() {
+		if (next("{")) {
+			if (L()) {
+				return next("}");
+			}
+		}
+		return next(";");
+	}
+
+	//L	-> A L | eps
+	private boolean L() {
+		if (axiom()) {
+			return L();
+		}
+		return true;
+	}
+}

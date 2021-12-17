@@ -1,0 +1,75 @@
+package com.esisa.compiler.parser;
+
+
+/*
+ * Grammaire
+ * 
+ * A	-> W | D
+ * W	-> while ( C ) L
+ * L	-> { I } | ;
+ * I	-> A I | eps
+ * C	-> E
+ * E	-> N OpRel N EP
+ * EP	-> OpLog E | eps
+ * N	-> id | nb
+ * D	-> do { I } while { C };
+ * 
+ * VT	-> { oprel, oplog, {, }, ;, (, ), id, nb, do, while }
+ */
+public class WhileParser extends Parser {
+
+	public WhileParser() {
+		getScanner().addReservedWordList("Boucle", "do", "while");
+	}
+
+	@Override
+	public boolean axiom() {
+		if (W()) {
+			return true;
+		}
+		if (D()) {
+			return true;
+		}
+		return false;
+	}
+
+	//W	-> while ( C ) L
+	private boolean W() {
+		if (next("while")) {
+			if (next("(")) {
+				if (C()) {
+					if (next(")"))
+				}
+			}
+		}
+		return false;
+	}
+
+	//C	-> E
+	private boolean C() {
+		return E();
+	}
+
+	
+	//E	-> N OpRel N EP
+	private boolean E() {
+		if (N()) {
+			if (next("Opérateur Logique")) {
+				if (N()) {
+					return EP();
+				}
+			}
+		}
+	}
+	
+	private boolean N() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean D() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

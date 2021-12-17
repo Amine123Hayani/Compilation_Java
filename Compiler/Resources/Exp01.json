@@ -1,0 +1,6 @@
+{
+	"id" : 101,
+	"title" : "POO en JavaScript",
+	"available" : false,
+	"array" : [10,20,"hamid",true,3.4]
+}

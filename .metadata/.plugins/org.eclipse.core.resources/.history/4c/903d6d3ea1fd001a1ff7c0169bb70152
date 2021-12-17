@@ -1,0 +1,42 @@
+package com.esisa.compiler.parser;
+
+import java.io.File;
+import java.util.Vector;
+
+import com.esisa.compiler.scanner.InputTape;
+import com.esisa.compiler.scanner.swing.FORParser;
+import com.esisa.compiler.scanner.Error;
+
+public class ParserTest {
+
+	public ParserTest() {
+		exp02();
+	}
+	
+	private void exp01() {
+		InputTape inputTape = new InputTape(new File("Resources/exp03.cpp"));
+		Parser parser = new IFParser();
+		boolean result = parser.parse(inputTape);
+		System.out.println(result);
+		Vector<Error> errors = parser.getErrors();
+		for (Error error : errors) {
+			System.out.println(error);
+		}
+	}
+	
+	private void exp02() {
+		InputTape inputTape = new InputTape(new File("Resources/for.txt"));
+		Parser parser = new FORParser();
+		boolean result = parser.parse(inputTape);
+		System.out.println(result);
+		Vector<Error> errors = parser.getErrors();
+		for (Error error : errors) {
+			System.out.println(error);
+		}
+	}
+	
+	public static void main(String[] args) {
+		new ParserTest();
+	}
+
+}
